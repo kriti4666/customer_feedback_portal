@@ -51,5 +51,5 @@ npm start
 Contributor Name : Kriti
 
 Repository Links
-Frontend link : 
+Frontend link : https://659bd81029d2ab4444ca0ee6--effortless-bonbon-b55995.netlify.app/
 Backend link : https://basal-backend.onrender.com/
