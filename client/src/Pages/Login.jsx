@@ -91,6 +91,11 @@ const Login = () => {
           </Stack>
         </Box>
       </Stack>
+      <Box align="center">
+        <p>for Admin use </p>
+        <p>email: Admin_basal@gmail.com</p>
+        <p>password: AdminBasal@1234</p>
+      </Box>
     </Container>
   );
 };

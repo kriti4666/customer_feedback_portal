@@ -6,6 +6,7 @@ import {
   Table,
   TableContainer,
   Tbody,
+  Td,
   Th,
   Thead,
   Tr,
@@ -17,6 +18,8 @@ import { deleteFeedback, getfeedback } from "../redux/feedback/action";
 import FeedbackModal from "../Component/FeedbackModal";
 import UpdateModal from "../Component/UpdateModal";
 import ShowAlert from "../Component/ShowAlert";
+import Navbar from "../Component/Navbar";
+import LoadingSkeleton from "../Component/LoadingSkeleton";
 
 const initState = {
   customerName: "",
@@ -38,8 +41,12 @@ const ShowFeedback = () => {
 
   const list = useSelector(({ feedbackListReducer }) => feedbackListReducer);
   const add = useSelector(({ feedbackCreateReducer }) => feedbackCreateReducer);
-  const update = useSelector(({ feedbackUpdateReducer }) => feedbackUpdateReducer);
-  const deletefb = useSelector(({ feedbackDeleteReducer }) => feedbackDeleteReducer);
+  const update = useSelector(
+    ({ feedbackUpdateReducer }) => feedbackUpdateReducer
+  );
+  const deletefb = useSelector(
+    ({ feedbackDeleteReducer }) => feedbackDeleteReducer
+  );
 
   const handelUpdate = (id, feedback) => {
     onOpenEdit();
@@ -49,8 +56,7 @@ const ShowFeedback = () => {
 
   const handelDelete = (id) => {
     dispactch(deleteFeedback(id, token));
-  }
-
+  };
 
   useEffect(() => {
     if (add.error) {
@@ -92,68 +98,84 @@ const ShowFeedback = () => {
   }, []);
 
   return (
-    <Container
-      maxW="80%"
-      py={{ base: "12", md: "24" }}
-      px={{ base: "0", sm: "8" }}
-    >
-      <Heading textAlign="center" mb="30px" size={{ base: "s", md: "lg" }}>
-        Customer Feedback Details
-      </Heading>
-      {alert.message && (
-        <ShowAlert
-          title={alert.status === "success" ? "Success!" : "Error!"}
-          desc={alert.message}
-          status={alert.status}
-        />
-      )}
-      <TableContainer>
-        <Table size={"lg"} variant="striped" colorScheme="teal">
-          <Thead>
-            <Tr>
-              <Th>Customer Name</Th>
-              <Th>Feedback</Th>
-              <Th>Date</Th>
-              <Th>Add Feedback</Th>
-              <Th>Update</Th>
-              <Th>Delete</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {list.res?.map((fd, i) => (
-              <Tr key={i} gap={"30px"}>
-                <td>{fd.customerName}</td>
-                <td>{fd.feedback}</td>
-                <td>{fd.date}</td>
-                <td align="center">
-                  <Button onClick={onOpen} colorScheme="messenger">
-                    Add{" "}
-                  </Button>
-                </td>
-                <td align="center">
-                  <Button
-                    colorScheme="whatsapp"
-                    onClick={() => handelUpdate(fd._id, fd)}
-                  >
-                    Update
-                  </Button>
-                </td>
-                <td align="center">
-                  <Button colorScheme="red" onClick={() => handelDelete(fd._id)}>Delete</Button>
-                </td>
+    <>
+      <Navbar />
+      <Container
+        maxW="80%"
+        py={{ base: "12", md: "24" }}
+        px={{ base: "0", sm: "8" }}
+      >
+        <Heading textAlign="center" mb="30px" size={{ base: "s", md: "lg" }}>
+          Customer Feedback Details
+        </Heading>
+        {alert.message && (
+          <ShowAlert
+            title={alert.status === "success" ? "Success!" : "Error!"}
+            desc={alert.message}
+            status={alert.status}
+          />
+        )}
+        <TableContainer>
+          <Table size={"lg"} variant="striped" colorScheme="teal">
+            <Thead>
+              <Tr>
+                <Th>Customer Name</Th>
+                <Th>Feedback</Th>
+                <Th>Date</Th>
+                <Th>Add Feedback</Th>
+                <Th>Update</Th>
+                <Th>Delete</Th>
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
-      <FeedbackModal isOpen={isOpen} onClose={onClose} initState={initState} />
-      <UpdateModal
-        isOpenEdit={isOpenEdit}
-        onCloseEdit={onCloseEdit}
-        initState={userFd}
-        id={userId}
-      />
-    </Container>
+            </Thead>
+            <Tbody>
+              {list.loading ? (
+                <LoadingSkeleton />
+              ) : (
+                list.res?.map((fd, i) => (
+                  <Tr key={i} gap={"30px"}>
+                    <Td>{fd.customerName}</Td>
+                    <Td>{fd.feedback}</Td>
+                    <Td>{fd.date}</Td>
+                    <Td align="center">
+                      <Button onClick={onOpen} colorScheme="messenger">
+                        Add{" "}
+                      </Button>
+                    </Td>
+                    <Td align="center">
+                      <Button
+                        colorScheme="whatsapp"
+                        onClick={() => handelUpdate(fd._id, fd)}
+                      >
+                        Update
+                      </Button>
+                    </Td>
+                    <Td align="center">
+                      <Button
+                        colorScheme="red"
+                        onClick={() => handelDelete(fd._id)}
+                      >
+                        Delete
+                      </Button>
+                    </Td>
+                  </Tr>
+                ))
+              )}
+            </Tbody>
+          </Table>
+        </TableContainer>
+        <FeedbackModal
+          isOpen={isOpen}
+          onClose={onClose}
+          initState={initState}
+        />
+        <UpdateModal
+          isOpenEdit={isOpenEdit}
+          onCloseEdit={onCloseEdit}
+          initState={userFd}
+          id={userId}
+        />
+      </Container>
+    </>
   );
 };
 
