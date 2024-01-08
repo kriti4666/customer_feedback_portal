@@ -4,7 +4,8 @@ const initalState = {
   loading: false,
   error: false,
   res: [],
-  data: ""
+  data: "",
+  errMessage: "",
 };
 
 export const feedbackListReducer = (state = initalState, { type, payload }) => {
@@ -15,6 +16,7 @@ export const feedbackListReducer = (state = initalState, { type, payload }) => {
         loading: true,
         error: false,
         res: [],
+        errMessage: "",
       };
     case feedbackActionTypes.FEEDBACK_LIST_SUCCESS:
       console.log(payload, "auth");
@@ -22,31 +24,35 @@ export const feedbackListReducer = (state = initalState, { type, payload }) => {
         ...state,
         loading: false,
         error: false,
-        res: payload
+        res: payload,
+        errMessage: "",
       };
     case feedbackActionTypes.FEEDBACK_LIST_FAILURE:
       return {
         ...state,
         loading: false,
         error: true,
-        res: []
+        res: [],
+        errMessage: payload,
       };
-    
+
     default:
       return state;
   }
 };
 
-
-export const feedbackCreateReducer = (state = initalState, { type, payload }) => {
+export const feedbackCreateReducer = (
+  state = initalState,
+  { type, payload }
+) => {
   switch (type) {
     case feedbackActionTypes.POST_FEEDBACK_FAILURE:
       return {
         ...state,
         loading: true,
         error: false,
-        res: [],
-        data: ""
+        data: "",
+        errMessage: "",
       };
     case feedbackActionTypes.POST_FEEDBACK_SUCCESS:
       console.log(payload, "auth");
@@ -54,85 +60,88 @@ export const feedbackCreateReducer = (state = initalState, { type, payload }) =>
         ...state,
         loading: false,
         error: false,
-        res: payload,
-        data: payload
+        data: payload,
+        errMessage: "",
       };
     case feedbackActionTypes.POST_FEEDBACK_FAILURE:
       return {
         ...state,
         loading: false,
         error: true,
-        res: [],
-        data: ""
+        data: "",
+        errMessage: payload,
       };
-    
+
     default:
       return state;
   }
 };
 
-
-export const feedbackUpdateReducer = (state = initalState, { type, payload }) => {
+export const feedbackUpdateReducer = (
+  state = initalState,
+  { type, payload }
+) => {
   switch (type) {
     case feedbackActionTypes.UPDATE_FEEDBACK_REQUEST:
       return {
         ...state,
         loading: true,
         error: false,
-        res: [],
-        data: ""
+        errMessage: "",
+        data: "",
       };
     case feedbackActionTypes.UPDATE_FEEDBACK_SUCCESS:
       return {
         ...state,
         loading: false,
         error: false,
-        res: payload,
-        data: payload
+        errMessage: "",
+        data: payload,
       };
     case feedbackActionTypes.UPDATE_FEEDBACK_FAILURE:
       return {
         ...state,
         loading: false,
         error: true,
-        res: [],
-        data: ""
+        errMessage: payload,
+        data: "",
       };
-    
+
     default:
       return state;
   }
 };
-export const feedbackDeleteReducer = (state = initalState, { type, payload }) => {
+export const feedbackDeleteReducer = (
+  state = initalState,
+  { type, payload }
+) => {
   switch (type) {
     case feedbackActionTypes.DELETE_FEEDBACK_REQUEST:
       return {
         ...state,
         loading: true,
         error: false,
-        res: [],
-        data: ""
+        data: "",
+        errMessage: "",
       };
     case feedbackActionTypes.DELETE_FEEDBACK_SUCCESS:
       return {
         ...state,
         loading: false,
         error: false,
-        res: payload,
-        data: payload
+        errMessage: "",
+        data: payload,
       };
     case feedbackActionTypes.DELETE_FEEDBACK_FAILURE:
       return {
         ...state,
         loading: false,
         error: true,
-        res: [],
-        data: ""
+        errMessage: payload,
+        data: "",
       };
-    
+
     default:
       return state;
   }
 };
-
-

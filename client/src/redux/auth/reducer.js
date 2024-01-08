@@ -5,7 +5,8 @@ const initalState = {
   error: false,
   isAuth: false,
   token: "",
-  res: ""
+  res: "",
+  errMessage: "",
 };
 
 export const registerReducer = (state = initalState, { type, payload }) => {
@@ -15,7 +16,8 @@ export const registerReducer = (state = initalState, { type, payload }) => {
         ...state,
         loading: true,
         error: null,
-        res: ""
+        res: "",
+        errMessage: "",
       };
     case authActionTypes.REGISTER_SUCCESS:
       console.log(payload, "auth");
@@ -23,14 +25,16 @@ export const registerReducer = (state = initalState, { type, payload }) => {
         ...state,
         loading: false,
         error: null,
-        res: payload
+        res: payload,
+        errMessage: "",
       };
     case authActionTypes.REGISTER_FAILURE:
       return {
         ...state,
         loading: false,
         error: true,
-        res: ""
+        res: "",
+        errMessage: payload,
       };
     
     default:
@@ -46,6 +50,7 @@ export const loginReducer = (state = initalState, { type, payload }) => {
         loading: true,
         error: null,
         isAuth: false,
+        errMessage: "",
       };
     case authActionTypes.LOGIN_SUCCESS:
       console.log(payload, "auth");
@@ -54,6 +59,7 @@ export const loginReducer = (state = initalState, { type, payload }) => {
         loading: false,
         token: payload,
         error: null,
+        errMessage: "",
       };
     case authActionTypes.LOGIN_FAILURE:
       return {
@@ -61,6 +67,7 @@ export const loginReducer = (state = initalState, { type, payload }) => {
         loading: false,
         token: "",
         error: true,
+        errMessage: payload,
       };
     case authActionTypes.LOGOUT_REQ:
       localStorage.removeItem("token");

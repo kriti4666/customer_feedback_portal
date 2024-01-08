@@ -1,25 +1,53 @@
 import axios from "axios";
 import { authActionTypes } from "./actionType";
 
+// export const registerUser = (formData) => async (dispatch) => {
+//   console.log(formData, "cred");
+//   try {
+//     dispatch({ type: authActionTypes.REGISTER_REQUEST });
+//     let response = await axios.post(
+//       "https://basal-backend.onrender.com/user/register",
+//       formData
+//     );
+//     console.log(response);
+//     if (response) {
+//       dispatch({
+//         type: authActionTypes.REGISTER_SUCCESS,
+//         payload: response.data,
+//       });
+//     }
+//   } catch (error) {
+//     dispatch({ type: authActionTypes.REGISTER_FAILURE, payload: error });
+//   }
+// };
+
 export const registerUser = (formData) => async (dispatch) => {
-  console.log(formData, "cred");
   try {
     dispatch({ type: authActionTypes.REGISTER_REQUEST });
     let response = await axios.post(
       "https://basal-backend.onrender.com/user/register",
       formData
     );
-    console.log(response);
-    if (response) {
+
+    if (response.status === 200) {
       dispatch({
         type: authActionTypes.REGISTER_SUCCESS,
         payload: response.data,
       });
+    } else {
+      dispatch({
+        type: authActionTypes.REGISTER_FAILURE,
+        payload: "User already exists!",
+      });
     }
   } catch (error) {
-    dispatch({ type: authActionTypes.REGISTER_FAILURE });
+    dispatch({
+      type: authActionTypes.REGISTER_FAILURE,
+      payload: error.message || "An error occurred",
+    });
   }
 };
+
 export const authenticate = (loginCred) => async (dispatch) => {
   console.log(loginCred, "cred");
   try {
@@ -34,15 +62,19 @@ export const authenticate = (loginCred) => async (dispatch) => {
         type: authActionTypes.LOGIN_SUCCESS,
         payload: response.data.token,
       });
+    } else {
+      dispatch({ type: authActionTypes.LOGIN_FAILURE, payload: "User Not Found!" || response.data });
     }
     localStorage.setItem("token", response.data.token);
   } catch (error) {
-    dispatch({ type: authActionTypes.LOGIN_FAILURE });
+    dispatch({
+      type: authActionTypes.LOGIN_FAILURE,
+      payload: error.message || "An error occurred",
+    });
   }
 };
 
 export const Logout = () => async (dispatch) => {
-  // REMOVE_LOCAL("login_data");
   localStorage.removeItem("token");
   dispatch({ type: authActionTypes.LOGOUT_REQ });
 };

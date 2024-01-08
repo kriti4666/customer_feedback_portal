@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -14,8 +14,9 @@ import {
   Text,
 } from "@chakra-ui/react";
 import PasswordField from "../Component/PasswordField";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../redux/auth/action";
+import ShowAlert from "../Component/ShowAlert";
 
 const initState = {
   email: "",
@@ -24,7 +25,9 @@ const initState = {
 
 const Register = () => {
   const [formData, setFormData] = useState(initState);
+  const [alert, setAlert] = useState({ status: "success", message: "" });
   const dispactch = useDispatch();
+  const registerStatus = useSelector(({ registerReducer }) => registerReducer);
 
   // OnChange value
   const handleFormChange = ({ target }) => {
@@ -33,16 +36,35 @@ const Register = () => {
   };
 
   const handleSubmit = () => {
-    dispactch(registerUser(formData))
+    dispactch(registerUser(formData));
   };
 
-  console.log(formData)
+  useEffect(() => {
+    if (registerStatus.error || registerStatus.errMessage) {
+      setAlert({ status: "error", message: registerStatus.errMessage });
+    } else if (registerStatus.res) {
+      setAlert({
+        status: "success",
+        message: "Signup successfully.",
+      });
+    }
+  }, [registerStatus.res, registerStatus.error]);
+
+  console.log(registerStatus.res, "res");
+
   return (
     <Container
       maxW="lg"
       py={{ base: "12", md: "24" }}
       px={{ base: "0", sm: "8" }}
     >
+      {alert.message && (
+        <ShowAlert
+          title={alert.status === "success" ? "Success!" : "Error!"}
+          desc={alert.message}
+          status={alert.status}
+        />
+      )}
       <Stack spacing="8">
         <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
           <Heading size={{ base: "s", md: "lg" }}>
@@ -84,7 +106,15 @@ const Register = () => {
               </Button>
             </HStack>
             <Stack spacing="6">
-              <Button onClick={handleSubmit}>Sign up</Button>
+              {/* <Button onClick={handleSubmit}>Sign up</Button> */}
+
+              {registerStatus.loading ? (
+                <Button isLoading colorScheme="teal" variant="solid">
+                  Loading
+                </Button>
+              ) : (
+                <Button onClick={handleSubmit}>Sign up</Button>
+              )}
             </Stack>
           </Stack>
         </Box>
@@ -94,3 +124,4 @@ const Register = () => {
 };
 
 export default Register;
+// priya@123 priyaVerma@gmail.com

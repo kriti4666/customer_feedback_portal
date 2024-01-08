@@ -2,24 +2,35 @@ const UserModel = require("../models/user.model");
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
 
-const signupUser = (req, res) => {
+const signupUser = async (req, res) => {
   const { email, password } = req.body;
-  // console.log(email, password)
-  bcrypt.hash(password, 5, async function (err, hash) {
-    if (err) {
-      return res.status(500).send("Something went worng please try again...!");
-    } else {
-      const user = new UserModel({ email, password: hash });
+  try {
+    const existingUser = await UserModel.find({ email });
+
+    if (existingUser.length > 0) {
+      return res.status(400).send("User already exists!");
+    }
+
+    bcrypt.hash(password, 5, async function (err, hash) {
+      if (err) {
+        return res.status(500).send("Something went wrong, please try again!");
+      }
+
+      const newUser = new UserModel({ email, password: hash });
+
       try {
-        await user.save();
-        return res.status(200).send("Signup successfull");
+        await newUser.save();
+        return res.status(200).send("Signup successful");
       } catch (error) {
         console.log(error);
         return res.status(401).send({ message: error.message });
       }
-    }
-  });
+    });
+  } catch (error) {
+    return res.status(500).send("Server error");
+  }
 };
+
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;

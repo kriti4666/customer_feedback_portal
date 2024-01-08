@@ -58,9 +58,13 @@ const ShowFeedback = () => {
     dispactch(deleteFeedback(id, token));
   };
 
+  console.log(list.res, "res");
+
   useEffect(() => {
-    if (add.error) {
-      setAlert({ status: "error", message: "Failed to create Feedback." });
+    if (add.error || add.errMessage) {
+      add.errMessage
+        ? setAlert({ status: "error", message: add.errMessage })
+        : setAlert({ status: "error", message: add.error });
     } else if (add.data) {
       setAlert({
         status: "success",
@@ -70,8 +74,8 @@ const ShowFeedback = () => {
   }, [add.data, add.error]);
 
   useEffect(() => {
-    if (update.error) {
-      setAlert({ status: "error", message: "Failed to update Feedback." });
+    if (update.error || update.errMessage) {
+      setAlert({ status: "error", message: update.errMessage });
     } else if (update.data) {
       setAlert({
         status: "success",
@@ -82,7 +86,7 @@ const ShowFeedback = () => {
 
   useEffect(() => {
     if (deletefb.error) {
-      setAlert({ status: "error", message: "Failed to delete Feedback." });
+      setAlert({ status: "error", message: deletefb.errMessage });
     } else if (deletefb.data) {
       setAlert({
         status: "success",
@@ -90,8 +94,6 @@ const ShowFeedback = () => {
       });
     }
   }, [deletefb.data, deletefb.error]);
-
-  console.log(userFd, "fd");
 
   useEffect(() => {
     dispactch(getfeedback(token));
@@ -115,6 +117,9 @@ const ShowFeedback = () => {
             status={alert.status}
           />
         )}
+        <Button onClick={onOpen} colorScheme="messenger">
+          Add Feedback
+        </Button>
         <TableContainer>
           <Table size={"lg"} variant="striped" colorScheme="teal">
             <Thead>
@@ -122,7 +127,6 @@ const ShowFeedback = () => {
                 <Th>Customer Name</Th>
                 <Th>Feedback</Th>
                 <Th>Date</Th>
-                <Th>Add Feedback</Th>
                 <Th>Update</Th>
                 <Th>Delete</Th>
               </Tr>
@@ -132,15 +136,11 @@ const ShowFeedback = () => {
                 <LoadingSkeleton />
               ) : (
                 list.res?.map((fd, i) => (
-                  <Tr key={i} gap={"30px"}>
+                  <Tr key={fd._id} gap={"30px"}>
                     <Td>{fd.customerName}</Td>
                     <Td>{fd.feedback}</Td>
                     <Td>{fd.date}</Td>
-                    <Td align="center">
-                      <Button onClick={onOpen} colorScheme="messenger">
-                        Add{" "}
-                      </Button>
-                    </Td>
+
                     <Td align="center">
                       <Button
                         colorScheme="whatsapp"

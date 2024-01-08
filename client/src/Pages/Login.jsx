@@ -15,8 +15,9 @@ import {
 } from "@chakra-ui/react";
 import PasswordField from "../Component/PasswordField";
 import { authenticate } from "../redux/auth/action";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import ShowAlert from "../Component/ShowAlert";
 
 const initState = {
   email: "",
@@ -28,6 +29,8 @@ const Login = () => {
   const dispactch = useDispatch();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const [alert, setAlert] = useState({ status: "success", message: "" });
+  const loginStatus = useSelector(({ loginReducer }) => loginReducer);
 
   const handleFormChange = ({ target }) => {
     const { name, value } = target;
@@ -39,8 +42,21 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (token) navigate("/feedback");
-  }, [token]);
+    if (loginStatus.error || loginStatus.errMessage) {
+      setAlert({ status: "error", message: loginStatus.errMessage });
+    } else if (loginStatus.res) {
+      setAlert({
+        status: "success",
+        message: "Login successfully.",
+      });
+    }
+  }, [loginStatus.res, loginStatus.error]);
+
+  useEffect(() => {
+    if (token || loginStatus.isAuth) {
+      navigate("/feedback");
+    }
+  }, [token, loginStatus.isAuth]);
 
   return (
     <Container
@@ -48,6 +64,13 @@ const Login = () => {
       py={{ base: "12", md: "24" }}
       px={{ base: "0", sm: "8" }}
     >
+      {alert.message && (
+        <ShowAlert
+          title={alert.status === "success" ? "Success!" : "Error!"}
+          desc={alert.message}
+          status={alert.status}
+        />
+      )}
       <Stack spacing="8">
         <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
           <Heading size={{ base: "sm", md: "lg" }}>

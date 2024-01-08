@@ -18,6 +18,11 @@ export const getfeedback = (token) => async (dispatch) => {
         type: feedbackActionTypes.FEEDBACK_LIST_SUCCESS,
         payload: data.result,
       });
+    } else {
+      dispatch({
+        type: feedbackActionTypes.FEEDBACK_LIST_FAILURE,
+        payload: "Not data Found" || response.data,
+      });
     }
   } catch (error) {
     dispatch({ type: feedbackActionTypes.FEEDBACK_LIST_FAILURE });
@@ -32,7 +37,7 @@ export const addFeedback = (formData, token) => async (dispatch) => {
       formData,
       {
         headers: {
-          Authorization: `Bearer ${token}`, // Set the Authorization header with the token
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -42,9 +47,17 @@ export const addFeedback = (formData, token) => async (dispatch) => {
         type: feedbackActionTypes.POST_FEEDBACK_SUCCESS,
         payload: data.result,
       });
+    } else {
+      dispatch({
+        type: feedbackActionTypes.POST_FEEDBACK_FAILURE,
+        payload: "Failed to Add" || response.data,
+      });
     }
   } catch (error) {
-    dispatch({ type: feedbackActionTypes.POST_FEEDBACK_FAILURE });
+    dispatch({
+      type: feedbackActionTypes.POST_FEEDBACK_FAILURE,
+      payload: error.message,
+    });
   }
 };
 export const updateFeedback = (updateData, id, token) => async (dispatch) => {
@@ -66,13 +79,21 @@ export const updateFeedback = (updateData, id, token) => async (dispatch) => {
         type: feedbackActionTypes.UPDATE_FEEDBACK_SUCCESS,
         payload: data.result,
       });
+    } else {
+      dispatch({
+        type: feedbackActionTypes.UPDATE_FEEDBACK_FAILURE,
+        payload: "Failed to Update" || response.data,
+      });
     }
   } catch (error) {
-    dispatch({ type: feedbackActionTypes.UPDATE_FEEDBACK_FAILURE });
+    dispatch({
+      type: feedbackActionTypes.UPDATE_FEEDBACK_FAILURE,
+      payload: error.message,
+    });
   }
 };
 export const deleteFeedback = (id, token) => async (dispatch) => {
-  console.log( id, token);
+  console.log(id, token);
   try {
     dispatch({ type: feedbackActionTypes.DELETE_FEEDBACK_REQUEST });
     let response = await axios.delete(
@@ -89,8 +110,16 @@ export const deleteFeedback = (id, token) => async (dispatch) => {
         type: feedbackActionTypes.DELETE_FEEDBACK_SUCCESS,
         payload: data.result,
       });
+    } else {
+      dispatch({
+        type: feedbackActionTypes.DELETE_FEEDBACK_FAILURE,
+        payload: "Failed to Delete" || response.data,
+      });
     }
   } catch (error) {
-    dispatch({ type: feedbackActionTypes.DELETE_FEEDBACK_FAILURE });
+    dispatch({
+      type: feedbackActionTypes.DELETE_FEEDBACK_FAILURE,
+      payload: error.message,
+    });
   }
 };

@@ -1,4 +1,12 @@
-import { Container, Flex, HStack, Heading, Spacer, Text } from "@chakra-ui/react";
+import {
+  Button,
+  Container,
+  Flex,
+  HStack,
+  Heading,
+  Spacer,
+  Text,
+} from "@chakra-ui/react";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -21,11 +29,11 @@ const Navbar = () => {
       </Heading>
       <Spacer />
       <HStack spacing="24px">
-        <Text link="/">Register</Text>
+        <Text onClick={() => navigate("/")}>Register</Text>
         {!token ? (
-          <Text onClick={() => navigate("/login")}>Login</Text>
+          <Button onClick={() => navigate("/login")}>Login</Button>
         ) : (
-          <Text onClick={() => dispactch(Logout())}>Logout</Text>
+          <Button onClick={() => dispactch(Logout())}>Logout</Button>
         )}
       </HStack>
     </Flex>
