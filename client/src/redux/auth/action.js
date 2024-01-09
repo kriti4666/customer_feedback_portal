@@ -1,25 +1,7 @@
 import axios from "axios";
 import { authActionTypes } from "./actionType";
 
-// export const registerUser = (formData) => async (dispatch) => {
-//   console.log(formData, "cred");
-//   try {
-//     dispatch({ type: authActionTypes.REGISTER_REQUEST });
-//     let response = await axios.post(
-//       "https://basal-backend.onrender.com/user/register",
-//       formData
-//     );
-//     console.log(response);
-//     if (response) {
-//       dispatch({
-//         type: authActionTypes.REGISTER_SUCCESS,
-//         payload: response.data,
-//       });
-//     }
-//   } catch (error) {
-//     dispatch({ type: authActionTypes.REGISTER_FAILURE, payload: error });
-//   }
-// };
+
 
 export const registerUser = (formData) => async (dispatch) => {
   try {
@@ -49,7 +31,6 @@ export const registerUser = (formData) => async (dispatch) => {
 };
 
 export const authenticate = (loginCred) => async (dispatch) => {
-  console.log(loginCred, "cred");
   try {
     dispatch({ type: authActionTypes.LOGIN_REQUEST });
     let response = await axios.post(

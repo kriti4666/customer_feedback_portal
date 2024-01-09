@@ -93,7 +93,6 @@ export const updateFeedback = (updateData, id, token) => async (dispatch) => {
   }
 };
 export const deleteFeedback = (id, token) => async (dispatch) => {
-  console.log(id, token);
   try {
     dispatch({ type: feedbackActionTypes.DELETE_FEEDBACK_REQUEST });
     let response = await axios.delete(

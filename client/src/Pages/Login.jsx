@@ -28,7 +28,7 @@ const Login = () => {
   const [loginData, setLoginData] = useState(initState);
   const dispactch = useDispatch();
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  // const loginStatus.token = localStorage.getItem("token");
   const [alert, setAlert] = useState({ status: "success", message: "" });
   const loginStatus = useSelector(({ loginReducer }) => loginReducer);
 
@@ -44,19 +44,14 @@ const Login = () => {
   useEffect(() => {
     if (loginStatus.error || loginStatus.errMessage) {
       setAlert({ status: "error", message: loginStatus.errMessage });
-    } else if (loginStatus.res) {
-      setAlert({
-        status: "success",
-        message: "Login successfully.",
-      });
     }
-  }, [loginStatus.res, loginStatus.error]);
+  }, [ loginStatus.error]);
 
   useEffect(() => {
-    if (token || loginStatus.isAuth) {
+    if (loginStatus.token || loginStatus.isAuth) {
       navigate("/feedback");
     }
-  }, [token, loginStatus.isAuth]);
+  }, [loginStatus.token, loginStatus.isAuth]);
 
   return (
     <Container

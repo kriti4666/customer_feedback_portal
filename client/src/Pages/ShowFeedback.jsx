@@ -58,7 +58,6 @@ const ShowFeedback = () => {
     dispactch(deleteFeedback(id, token));
   };
 
-  console.log(list.res, "res");
 
   useEffect(() => {
     if (add.error || add.errMessage) {

@@ -31,7 +31,6 @@ const UpdateModal = ({ isOpenEdit, onCloseEdit, initState, id }) => {
     setUpdateData({ ...updateData, [name]: value });
   };
 
-  console.log(updateData, initState.customerName, initState.feedback);
 
   const handleSubmit = () => {
     dispactch(updateFeedback(updateData, id, token));
