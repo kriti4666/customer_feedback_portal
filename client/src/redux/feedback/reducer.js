@@ -19,7 +19,7 @@ export const feedbackListReducer = (state = initalState, { type, payload }) => {
         errMessage: "",
       };
     case feedbackActionTypes.FEEDBACK_LIST_SUCCESS:
-      console.log(payload, "auth");
+      console.log(payload, "auth.");
       return {
         ...state,
         loading: false,
